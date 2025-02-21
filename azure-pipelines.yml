@@ -3,17 +3,20 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
+#anything happen in master branch, if add another line, meaning that trigger anything (on push)
 trigger:
 - master
 
+#agent in local pc
 pool:
-  vmImage: 'windows-latest'
+  name: 'shapool'
 
-variables:
+variables: #config in the vs code
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+#restore nugetpackage
 steps:
 - task: NuGetToolInstaller@1
 
@@ -21,10 +24,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+#build your apps and generate zip folder to migrate to production server
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"' #apps pack as a zip file
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
