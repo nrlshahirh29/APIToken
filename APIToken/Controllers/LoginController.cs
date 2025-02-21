@@ -25,7 +25,7 @@ namespace APIToken.Controllers
         private UserModel AuthenticateUser(UserModel login)
         {
             UserModel user = null;
-            if (login.Username.ToLower() == "shahirah" && login.Password.ToLower() == "busuk") //change pass
+            if (login.Username.ToLower() == "shahirah01" && login.Password.ToLower() == "busuk") //change pass
             {
                 user = new UserModel { Username = login.Username, Password = login.Password };
             }
